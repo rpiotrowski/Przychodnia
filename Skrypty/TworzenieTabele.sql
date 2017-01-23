@@ -21,11 +21,6 @@ IF OBJECT_ID('Usługi', 'U') IS NOT NULL
     	drop table Usługi
 
 
-
-
-
-
-
 create table Pacjenci
 (PESEL bigint not null primary key,
 imię varchar(20) not null,
@@ -38,8 +33,6 @@ check (len(PESEL) = 11),
 check(len(telefon)>6),
 check(mail like '%@%.%'),
 );
-
-
 
 
 create table Pracownicy
@@ -55,8 +48,6 @@ check(mail like '%@%.%'),
 );
 
 
-
-
 create table Usługi
 (idUs int identity(1,1) not null primary key,
 nazwa varchar(50) not null unique,
@@ -65,22 +56,10 @@ cena money not null,
 wymaga_skierowania tinyint DEFAULT 0);
 
 
-
-
-
-
-
-
 create table Umiejętności
 (idPrac int references Pracownicy(idPrac),
 idUs int references Usługi(idUs),
 );
-
-
-
-
-
-
 
 
 create table Grafik
@@ -93,25 +72,12 @@ check(dzień_tyg = 'poniedziałek' or dzień_tyg = 'wtorek' or dzień_tyg = 'śr
 dzień_tyg = 'czwartek' or dzień_tyg = 'piątek' or dzień_tyg = 'sobota'))
 
 
-
-
-
-
-
-
-
-
-
-
 create table Badania
 (idB int identity(1,1) primary key,
 PESEL bigint references Pacjenci(PESEL),
 data_badania date,
 wynik varchar(50),
 );
-
-
-
 
 create table Wizyty
 (idWiz int identity(1,1) primary key,
@@ -126,9 +92,6 @@ check (godzinaS <= godzinaZ),
 check (GETDATE() <= data_wizyty)
 );
 
-
-
-
 create table Skierowania
 (idS int identity(1,1) primary key,
 IdPrac int references Pracownicy(idPrac),
@@ -140,8 +103,7 @@ ilość_wizyt int default 0 not null, /*999 to nieskonczonosc wizyt */
 check (data_wystawienia <= data_ważności),
 );
 
-
-
+--===========================================================================================
 
 insert into Pacjenci
 values (95071912531, 'Mikołaj', 'Nowak','Słowiańska 90 60-321 Poznań',66776678,'mikolaj@gmail.com', default );
@@ -233,29 +195,16 @@ insert into Badania
 values(96100907776,'2016-12-03','Stwierdzono krwawienie pod językiem')
 
 
-
-
-
 INSERT into Skierowania
 values(1,95071912531,'2017-10-10', '2017-11-20', 4, default)
 INSERT into Skierowania
 values(2,96100907776,'2017-10-10', '2017-11-20', 4, default)
 
 
-
-
-
 INSERT into Wizyty
-values(95071912531,1,1,'2016-12-10','10:00:00','16:30:00',NULL);
+values(95071912531,1,1,'2018-12-10','10:00:00','16:30:00',NULL);
 INSERT into Wizyty
-values(96100907776,2,2,'2016-12-22','12:00:00','19:30:00',NULL);
-
-
-
-
-
-
-
+values(96100907776,2,2,'2018-12-22','12:00:00','19:30:00',NULL);
 
 
 select * from Pacjenci
