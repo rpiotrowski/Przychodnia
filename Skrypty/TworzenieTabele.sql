@@ -23,8 +23,8 @@ IF OBJECT_ID('Usługi', 'U') IS NOT NULL
 
 create table Pacjenci
 (PESEL bigint not null primary key,
-imię varchar(20) not null,
-nazwisko varchar(20),
+imię varchar(30) not null,
+nazwisko varchar(30),
 adres varchar(100),
 telefon bigint,  
 mail varchar(50),
@@ -37,12 +37,12 @@ check(mail like '%@%.%'),
 
 create table Pracownicy
 (idPrac int identity(1,1) primary key,
-imię varchar(10),
-nazwisko varchar(10),
+imię varchar(30),
+nazwisko varchar(30),
 adres varchar(100),
 telefon bigint,  
-mail varchar(20),
-specjalizacja varchar(10),
+mail varchar(50),
+specjalizacja varchar(20),
 check(len(telefon)>6),
 check(mail like '%@%.%'),
 );
