@@ -2,8 +2,8 @@
 --Dodanie nowego pracownika, zmiana jego danych
 --Dopisanie pracownikowi nowej umiejêtnoœci (wykonania ustalonej us³ugi)
 --Dodawanie nowych us³ug
-Umówienie wizyty pacjenta 
-Anulowanie wizyty
+--Umówienie wizyty pacjenta 
+--Anulowanie wizyty
 --Komentowanie wizyty przez pracownika z opisem przebiegu us³ugi
 
 --===========================================================================================================================================
@@ -153,3 +153,32 @@ end catch
 exec addComment 1,"Rozpoznanie zapalenie ucha srodkowego. Skierowanie pacjenta na masaz gleboki"
 
 --=============================================================================================================
+
+create procedure addVisit
+	@pesel bigint,
+	@idPrac int,
+	@idUs int,
+	@data_wizyty date,/*'YYYY-MM-DD'*/
+	@godzinaS time(0) ,
+	@godzinaZ time(0)
+as
+begin
+	insert into Wizyty
+	values(@pesel,@idPrac,@idUs,@data_wizyty,@godzinaS,@godzinaZ,NULL)
+	select * from Wizyty
+end
+
+exec addVisit 95071912345,5,1,"2017-03-10","10:00:00","10:30:00"
+
+--==========================================================================================
+
+create procedure removeV
+	@idWiz int
+as
+begin
+	delete from Wizyty
+	where idWiz = @idWiz
+	select * from Wizyty
+end
+
+removeV 2

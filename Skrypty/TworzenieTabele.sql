@@ -59,6 +59,7 @@ wymaga_skierowania tinyint DEFAULT 0);
 create table Umiejętności
 (idPrac int references Pracownicy(idPrac),
 idUs int references Usługi(idUs),
+CONSTRAINT uc_PersonID UNIQUE (idPrac,idUs)
 );
 
 
