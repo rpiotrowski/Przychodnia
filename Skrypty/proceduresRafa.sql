@@ -1,4 +1,4 @@
-alter procedure addPatient
+create procedure addPatient
         @pesel bigint,
 		@name varchar(30),
 		@surname varchar(30),
@@ -16,11 +16,9 @@ begin catch
      print ERROR_MESSAGE() 
 end catch
 
-exec addPatient 95071912345,Monika,Tyblewska,"Niebieska 19 64-320 Otusz",678678678,"monia@wp.pl",1
+--==========================================================================================
 
-
---==========================================================================================================================================
-alter procedure updatePatient
+create procedure updatePatient
 		@pesel bigint,
 		@name varchar(30),
 		@surname varchar(30),
@@ -39,9 +37,8 @@ begin catch
      print ERROR_MESSAGE() 
 end catch
 
-exec updatePatient 95071912345,Monika,Majewska,"Niebieska 19 64-320 Otusz",678678678,"monia@wp.pl",1
+--==========================================================================================
 
---============================================================================================================
 create function showPatient 
 (@i bigint)
 returns table
@@ -49,8 +46,11 @@ as
 return select * from Pacjenci where PESEL=@i
 
 select * from dbo.showPatient(95071912345)
---=============================================================================================================
-alter procedure addDoctor
+
+--==========================================================================================
+
+
+create procedure addDoctor
 	@imiê varchar(30),
 	@nazwisko varchar(30),
 	@adres varchar(100),
@@ -67,9 +67,10 @@ begin catch
      print ERROR_MESSAGE() 
 end catch
 
-exec addDoctor "Rafal","Piotrowski","Slowackiego 16 64-320 Olsztyn",678678678,"rafcio@wp.pl",laryngolog
---=============================================================================================================
-alter procedure updateDoctor
+--==========================================================================================
+
+
+create procedure updateDoctor
 	@id int,
 	@imiê varchar(30),
 	@nazwisko varchar(30),
@@ -88,9 +89,7 @@ begin catch
      print ERROR_MESSAGE() 
 end catch
 
-exec updateDoctor 5,"Rafal","Piotrowski","Slowackiego 16 64-320 Olsztyn",678678678,"rafcio@wp.pl",pediatra
-
---=======================================================================================================================
+--==========================================================================================
 
 create procedure addAbility
 	@idPrac int,
@@ -105,10 +104,9 @@ begin catch
      print ERROR_MESSAGE() 
 end catch
 
-exec addAbility 5,2
+--==========================================================================================
 
---=================================================================================================================
-alter procedure addService
+create procedure addService
 	@nazwa varchar(50),
 	@czas_trwania int,
 	@cena money,
@@ -123,11 +121,9 @@ begin catch
 	 print ERROR_MESSAGE()
 end catch
 
-exec addService "masaz gleboki",30,"200",0
+--==========================================================================================
 
---================================================================================================================
-
-alter procedure addComment
+create procedure addComment
 	@id int,
 	@str varchar(500)
 as
@@ -141,11 +137,9 @@ begin catch
 	 print ERROR_MESSAGE()
 end catch
 
-exec addComment 1,"Rozpoznanie zapalenie ucha srodkowego. Skierowanie pacjenta na masaz gleboki"
+--==========================================================================================
 
---=============================================================================================================
-
-alter procedure addVisit
+create procedure addVisit
 	@pesel bigint,
 	@idPrac int,
 	@idUs int,
@@ -160,8 +154,6 @@ begin
 	select * from Wizyty
 end
 
-exec addVisit 95071912345,4,1,"2017-03-10","10:00:00"
-
 --==========================================================================================
 
 create procedure removeV
@@ -172,7 +164,3 @@ begin
 	where idWiz = @idWiz
 	select * from Wizyty
 end
-
-removeV 2
-
---===========================================================================================

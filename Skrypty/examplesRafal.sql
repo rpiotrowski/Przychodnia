@@ -6,6 +6,6 @@ exec addAbility 5,2
 exec addService "masaz gleboki",30,"200",0
 exec addComment 1,"Rozpoznanie zapalenie ucha srodkowego. Skierowanie pacjenta na masaz gleboki"
 exec addVisit 95071912345,5,1,"2017-03-10","10:00:00","10:30:00"
-removeV 2
+exec removeV 2
 
 select * from dbo.showPatient(95071912345)
