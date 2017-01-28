@@ -119,7 +119,7 @@ exec addAbility 5,2
 --=================================================================================================================
 alter procedure addService
 	@nazwa varchar(50),
-	@czas_trwania TIME(0), /* HHH:MM:SS */
+	@czas_trwania int,
 	@cena money,
 	@wymaga_skierowania tinyint = 0 
 as
@@ -132,7 +132,7 @@ begin catch
 	 print ERROR_MESSAGE()
 end catch
 
-exec addService "masaz gleboki","00:30:00","200",0
+exec addService "masaz gleboki",30,"200",0
 
 --================================================================================================================
 
@@ -154,21 +154,22 @@ exec addComment 1,"Rozpoznanie zapalenie ucha srodkowego. Skierowanie pacjenta n
 
 --=============================================================================================================
 
-create procedure addVisit
+alter procedure addVisit
 	@pesel bigint,
 	@idPrac int,
 	@idUs int,
 	@data_wizyty date,/*'YYYY-MM-DD'*/
-	@godzinaS time(0) ,
-	@godzinaZ time(0)
+	@godzinaS time(0)	
 as
 begin
+	declare @godzinaZ time(0)
+	set @godzinaZ = DATEADD(MINUTE, (select czas_trwania from Us³ugi where idUs = @idUs), @godzinaS)
 	insert into Wizyty
 	values(@pesel,@idPrac,@idUs,@data_wizyty,@godzinaS,@godzinaZ,NULL)
 	select * from Wizyty
 end
 
-exec addVisit 95071912345,5,1,"2017-03-10","10:00:00","10:30:00"
+exec addVisit 95071912345,4,1,"2017-03-10","10:00:00"
 
 --==========================================================================================
 
@@ -182,3 +183,5 @@ begin
 end
 
 removeV 2
+
+--===========================================================================================

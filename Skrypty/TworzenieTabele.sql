@@ -51,7 +51,7 @@ check(mail like '%@%.%'),
 create table Usługi
 (idUs int identity(1,1) not null primary key,
 nazwa varchar(50) not null unique,
-czas_trwania TIME(0) not null /* HHH:MM:SS */,
+czas_trwania int not null /*tu musi byc int zeby funkcja DATEADD daialala */,
 cena money not null,
 wymaga_skierowania tinyint DEFAULT 0);
 
@@ -132,15 +132,15 @@ values('Gregory','House','Nowy Świat 32 68-012 Poznań',86376139,'greg@princeto
 
 
 insert into Usługi
-values('konsultacja laryngologiczna', '00:30:00', 150, 0);
+values('konsultacja laryngologiczna', 30, 150, 0);
 insert into Usługi
-values('konsultacja foniatryczna', '00:30:00', 150, 0);
+values('konsultacja foniatryczna',30, 150, 0);
 insert into Usługi
-values('Konsultacja z badaniem endoskopowym', '00:30:00', 30, 1);
+values('Konsultacja z badaniem endoskopowym',30, 30, 1);
 insert into Usługi
-values('Płukanie uszu', '00:05:00', 30, 1);
+values('Płukanie uszu',30, 30, 1);
 insert into Usługi
-values('Konsultacja u internisty', '00:20:00', 20, 0);
+values('Konsultacja u internisty',20, 20, 0);
 
 
 
