@@ -15,6 +15,9 @@ IF OBJECT_ID('Pracownicy', 'U') IS NOT NULL
 IF OBJECT_ID('Us³ugi', 'U') IS NOT NULL
     	drop table Us³ugi
 
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addBadanie')
+DROP PROCEDURE addBadanie
+GO
 
 IF EXISTS (
     SELECT * FROM sysobjects WHERE id = object_id(N'showDurationVisitAfterID') 
