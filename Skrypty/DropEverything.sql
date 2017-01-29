@@ -25,3 +25,10 @@ IF EXISTS (
 )
     DROP FUNCTION showDurationVisitAfterID
 GO
+
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'showVisitAfterPESEL') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION showVisitAfterPESEL
+GO

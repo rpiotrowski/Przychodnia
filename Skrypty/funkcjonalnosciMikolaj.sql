@@ -1,6 +1,7 @@
 
 /*Miko³aj Balcerek s416040 Przychodnia
 Podawanie czasu trwania wizyty - showDurationVisitAfterID
+Podawanie wizyt danego pacjenta - showVisitAfterPESEL
 Dodawanie badania - addBadanie*/
 
 --===========================================================================================================================================
@@ -11,6 +12,13 @@ IF EXISTS (
     AND xtype IN (N'FN', N'IF', N'TF')
 )
     DROP FUNCTION showDurationVisitAfterID
+GO
+
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'showVisitAfterPESEL') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION showVisitAfterPESEL
 GO
 
 IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addBadanie')
@@ -43,5 +51,14 @@ as
 ;
 GO
 
+--=============================================================================================================
+/* PODAWANIE WIZYT PO PESELU */ 
+CREATE FUNCTION showVisitAfterPESEL
+(@PESEL_zmienna bigint)
+returns table
+as
+	return select *  from Wizyty where (PESEL = @PESEL_zmienna);
+;
+GO
 
 
