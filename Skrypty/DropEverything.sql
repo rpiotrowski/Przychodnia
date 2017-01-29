@@ -70,3 +70,9 @@ BEGIN
       DROP TRIGGER [dbo].[Skierowania_used];
 END;
 go
+
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'regular_increments' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[regular_increments];
+END;
+go

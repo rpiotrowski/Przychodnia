@@ -10,6 +10,12 @@ BEGIN
 END;
 go
 
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'regular_increments' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[regular_increments];
+END;
+go
+
 /*Nadanie pacjentowi statusu VIP je¿eli ma >= 5 wizyt */
 create trigger VIP_count
 on Wizyty
@@ -44,11 +50,27 @@ update Skierowania
 	select * from Pacjenci;
 end
 else
+print 'Pacjent jest vipem, nie potrzeba odj¹æ od liczby skierowañ'
 begin
 print N'Skoñczy³y siê skierowania, pójdŸ do lekarza po nowe!'
 end
 end
 go
-
+/*Wizyty mog¹ byæ tylko umawiani na inkrementy 15 minutowe */
+create trigger regular_increments
+on Wizyty
+for insert
+as
+declare @help bigint;
+if (select datepart(minute, godzinaS) from inserted) = 0 or (select datepart(minute, godzinaS) from inserted) = 15 or (select datepart(minute, godzinaS) from inserted) = 30 or (select datepart(minute, godzinaS) from inserted) = 45
+begin
+print 'Wybrana godzina Startowa jest sukcesywnie inkrementem 15-minutowym'
+end
+else
+begin
+print 'Nie mozna umawiac na nieinkrementy 15-minutowe'
+rollback
+end
+go
 
 

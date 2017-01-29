@@ -22,18 +22,18 @@ exec updateGrafikGodzinyDzienTygodnia 1,"10:00:00","18:00:00","wtorek"
 select * from dbo.showGrafikAfterWeek(1)
 
 /*BAJER!!: Nadanie pacjentowi statusu VIP je¿eli ma >= 5 wizyt */
-insert into Wizyty values(96100907776,1,1,"2017-10-10","16:30:00","17:30:00","asdasd")
 select * from Wizyty
 select vip, Pesel from Pacjenci where pesel = 96100907776 /* STATUS VIP 0 */
 exec addVisit 96100907776,1,1,"2017-03-10","15:00:00"
 exec addVisit 96100907776,1,1,"2017-03-10","17:00:00"
 exec addVisit 96100907776,1,1,"2017-03-10","20:00:00"
-exec addVisit 96100907776,1,1,"2017-08-10","20:00:00"
+exec addVisit 96100907776,1,1,"2017-08-10","20:00:00" /* Dodaje 6 wizyt */
 exec addVisit 96100907776,1,1,"2017-04-10","20:00:00"
 exec addVisit 96100907776,1,1,"2017-04-10","10:00:00"
 select vip, Pesel from Pacjenci where pesel = 96100907776 /* STATUS VIP 1 PO ZMIANIE!!! */
 
 /* Vip-y nie trac¹ iloœci dostêpnych skierowañ' */
+update Pacjenci set vip = 1  where PESEL = 96100907776
 update Skierowania set iloœæ_wizyt = 3 where pesel = 96100907776
 select vip, Pesel from Pacjenci where pesel = 96100907776 /*jest vipem */
 select iloœæ_wizyt from Skierowania where pesel = 96100907776
@@ -43,12 +43,13 @@ select iloœæ_wizyt from Skierowania where pesel = 96100907776 /*nie zmienia siê 
 /* Umówienie wizyty u lekarza zmniejsza iloœæ wizyt, na które wa¿ne jest skierowanie */
 update Skierowania set iloœæ_wizyt = 3 where pesel = 95071912531;
 update Pacjenci set vip = 0  where PESEL = 95071912531
-select iloœæ_wizyt from Skierowania where PESEL = 95071912531;
+select iloœæ_wizyt from Skierowania where PESEL = 95071912531; /* Nie jest vipem */
 exec addVisit 95071912531,1,4,"2017-04-19","19:00:00"
 select iloœæ_wizyt from Skierowania where PESEL = 95071912531; /* Iloœæ wizyt zmniejszy³a siê */
 
-
-
+/* Czasy wizyt musz¹ byæ regularnie inkrementowane co 15 minut */
+exec addVisit 95071912531,1,4,"2017-08-19","10:10" /* Nie zadzia³a, bo inkrement 10 minut */
+exec addVisit 95071912531,1,4,"2017-08-19","10:15" /* Dzia³a, bo dobry inkrement */
 
 
 
