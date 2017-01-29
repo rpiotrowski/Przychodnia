@@ -2,7 +2,8 @@
 /*Miko³aj Balcerek s416040 Przychodnia
 Podawanie czasu trwania wizyty - showDurationVisitAfterID
 Podawanie wizyt danego pacjenta - showVisitAfterPESEL
-Dodawanie badania - addBadanie*/
+Dodawanie badania - addBadanie
+Dodawanie skierowania - addSkierowanie*/
 
 --===========================================================================================================================================
 
@@ -25,6 +26,9 @@ IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addBadanie')
 DROP PROCEDURE addBadanie
 GO
 
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addSkierowanie')
+DROP PROCEDURE addSkierowanie
+GO
 
 /* Dodawanie badania */
 Create procedure addBadanie
@@ -61,4 +65,24 @@ as
 ;
 GO
 
+/* Dodawanie skierowania, domyœlna wartoœæ iloœci skierowañ to 99 */
+Create procedure addSkierowanie
+        @pesel bigint,
+		@idprac int,
+		@idUs int,
+		@data_wystawienia date,
+		@data_wa¿noœci date,
+		@iloœæ_wizyt int
+as
+begin try
+		if (select idUs from Umiejêtnoœci where idPrac = @idprac) = @idUs
+		begin
+        insert into Skierowania
+		values (@idprac, @pesel, @data_wystawienia, @data_wa¿noœci, @idUS, @iloœæ_wizyt)
+		end
+end try
+begin catch
+     print ERROR_MESSAGE() 
+end catch;
+GO
 

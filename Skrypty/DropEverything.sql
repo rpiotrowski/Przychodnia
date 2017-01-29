@@ -32,3 +32,7 @@ IF EXISTS (
 )
     DROP FUNCTION showVisitAfterPESEL
 GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addSkierowanie')
+DROP PROCEDURE addSkierowanie
+GO
