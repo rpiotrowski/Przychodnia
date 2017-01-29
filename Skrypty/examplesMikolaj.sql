@@ -21,6 +21,20 @@ exec updateGrafikGodzinyDzienTygodnia 1,"10:00:00","18:00:00","wtorek"
 /*Pokaz grafiku dla pracownika na dzieñ/tyg */
 select * from dbo.showGrafikAfterWeek(1)
 
+/*Nadanie pacjentowi statusu VIP je¿eli ma >= 5 wizyt */
+exec addVisit(
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*Dodaje skierowanie na wizytê do lekarza, równie¿ sprawdza czy odpowiedni lekarz do odpowiendiej us³ug */
 select * from Skierowania
