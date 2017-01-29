@@ -5,8 +5,8 @@ exec updateDoctor 5,"Rafal","Piotrowski","Slowackiego 16 64-320 Olsztyn",6786786
 exec addAbility 5,2
 exec addService "masaz gleboki",30,"200",0
 exec addComment 1,"Skierowany na operacjê"
-exec addVisit 91071912531,4,1,"2017-06-10","10:00:00"
-exec removeV 32
+exec addVisit 91071912531,4,1,"2017-11-10","10:00:00"
+exec removeV 10
 
 select * from dbo.showPatient(95071912345)
 

@@ -201,3 +201,26 @@ from sysobjects so1 join sysobjects so2
 on so1.parent_obj = so2.id
 where so1.type = 'TR'
 and so2.name = 'Wizyty'
+
+alter trigger ten_visits_only
+on Wizyty
+after insert
+as
+begin
+	declare @vip tinyint
+	set @vip = (select vip from Pacjenci where PESEL = (select PESEL from inserted ) )
+
+	declare @l int
+	if @vip = 0
+		set @l = 3
+	else
+		set @l = 4
+	
+	if (select count(*) 
+	    from (select * from Wizyty where data_wizyty >= getdate()) as tab
+		where PESEL = (select PESEL from inserted)) > @l
+	begin
+			print 'Pacjent nie moze umowic juz wiecej wizyt'
+			rollback
+	end
+end
