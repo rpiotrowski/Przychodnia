@@ -90,7 +90,9 @@ godzinaS time(0) not null,
 godzinaZ time(0) not null,
 komentarz varchar(500),
 check (godzinaS <= godzinaZ),
-check (GETDATE() <= data_wizyty)
+check (GETDATE() <= data_wizyty),
+CONSTRAINT uc_pacjent UNIQUE (PESEL,data_wizyty,godzinaS),
+CONSTRAINT uc_lekarz UNIQUE (idPrac,data_wizyty,godzinaS)
 );
 
 create table Skierowania
