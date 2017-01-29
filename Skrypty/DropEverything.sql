@@ -58,3 +58,9 @@ IF EXISTS (
 )
     DROP FUNCTION showGrafikAfterWeek
 GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'VIP_count' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[VIP_count];
+END;
+go
