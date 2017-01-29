@@ -207,9 +207,18 @@ on Wizyty
 after insert
 as
 begin
+	declare @vip tinyint
+	set @vip = (select vip from Pacjenci where PESEL = (select PESEL from inserted ) )
+
+	declare @l int
+	if @vip = 0
+		set @l = 3
+	else
+		set @l = 4
+	
 	if (select count(*) 
 	    from (select * from Wizyty where data_wizyty >= getdate()) as tab
-		where PESEL = (select PESEL from inserted) ) > 3 
+		where PESEL = (select PESEL from inserted)) > @l
 	begin
 			print 'Pacjent nie moze umowic juz wiecej wizyt'
 			rollback
