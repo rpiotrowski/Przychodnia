@@ -18,11 +18,16 @@ exec addGrafikGodzinyDzienTygodnia 1,"10:00:00","15:00:00","wtorek"
 /*Edycja grafik na dany dzieñ tygodnia */
 exec updateGrafikGodzinyDzienTygodnia 1,"10:00:00","18:00:00","wtorek"
 
+/*Pokaz grafiku dla pracownika na dzieñ/tyg */
+select * from dbo.showGrafikAfterWeek(1)
+
 
 /*Dodaje skierowanie na wizytê do lekarza, równie¿ sprawdza czy odpowiedni lekarz do odpowiendiej us³ug */
 select * from Skierowania
 select * from Skierowania
 /* ERROR NUMERIC exec addSkierowanie 1,96100907776,"2017-11-11","2017-12-12",4,2 */
 GO
+
+
 
 

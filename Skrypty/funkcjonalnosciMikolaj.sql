@@ -16,6 +16,21 @@ IF EXISTS (
 GO
 
 IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'showGrafikAfterDay') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION showGrafikAfterDay
+GO
+
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'showGrafikAfterWeek') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION showGrafikAfterWeek
+GO
+
+
+IF EXISTS (
     SELECT * FROM sysobjects WHERE id = object_id(N'showVisitAfterPESEL') 
     AND xtype IN (N'FN', N'IF', N'TF')
 )
@@ -134,3 +149,12 @@ end catch
 GO
 
 
+
+/* PLAN TYGODNIA */
+CREATE FUNCTION showGrafikAfterWeek
+		(@idPrac int)
+returns table
+as
+	return select *  from Grafik where (idPrac = @idPrac);
+;
+GO

@@ -44,3 +44,17 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'updateGrafikGodzinyDzienTygodnia')
 DROP PROCEDURE updateGrafikGodzinyDzienTygodnia
 GO
+
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'showGrafikAfterDay') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION showGrafikAfterDay
+GO
+
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'showGrafikAfterWeek') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION showGrafikAfterWeek
+GO
