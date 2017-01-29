@@ -64,3 +64,9 @@ BEGIN
       DROP TRIGGER [dbo].[VIP_count];
 END;
 go
+
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'Skierowania_used' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[Skierowania_used];
+END;
+go

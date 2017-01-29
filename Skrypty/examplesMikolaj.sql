@@ -33,6 +33,21 @@ exec addVisit 96100907776,1,1,"2017-04-10","20:00:00"
 exec addVisit 96100907776,1,1,"2017-04-10","10:00:00"
 select vip, Pesel from Pacjenci where pesel = 96100907776 /* STATUS VIP 1 PO ZMIANIE!!! */
 
+/* Vip-y nie trac¹ iloœci dostêpnych skierowañ' */
+update Skierowania set iloœæ_wizyt = 3 where pesel = 96100907776
+select vip, Pesel from Pacjenci where pesel = 96100907776 /*jest vipem */
+select iloœæ_wizyt from Skierowania where pesel = 96100907776
+exec addVisit 96100907776,1,1,"2017-04-19","15:00:00" /* dodaje wizyte */
+select iloœæ_wizyt from Skierowania where pesel = 96100907776 /*nie zmienia siê iloœæ skierowañ */
+
+/* Umówienie wizyty u lekarza zmniejsza iloœæ wizyt, na które wa¿ne jest skierowanie */
+update Skierowania set iloœæ_wizyt = 3 where pesel = 95071912531;
+update Pacjenci set vip = 0  where PESEL = 95071912531
+select iloœæ_wizyt from Skierowania where PESEL = 95071912531;
+exec addVisit 95071912531,1,4,"2017-04-19","19:00:00"
+select iloœæ_wizyt from Skierowania where PESEL = 95071912531; /* Iloœæ wizyt zmniejszy³a siê */
+
+
 
 
 
