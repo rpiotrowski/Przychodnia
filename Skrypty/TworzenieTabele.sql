@@ -219,3 +219,17 @@ select * from Grafik
 select * from Badania
 select * from Skierowania
 
+
+create trigger ten_visits_only
+on Wizyty
+after insert
+as
+begin
+	if (select count(*) 
+	    from (select * from Wizyty where data_wizyty >= getdate()) as tab
+		where PESEL = (select PESEL from inserted) ) > 3 
+	begin
+			print 'Pacjent nie moze umowic juz wiecej wizyt'
+			rollback
+	end
+end
