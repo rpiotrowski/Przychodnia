@@ -21,11 +21,17 @@ exec updateGrafikGodzinyDzienTygodnia 1,"10:00:00","18:00:00","wtorek"
 /*Pokaz grafiku dla pracownika na dzieñ/tyg */
 select * from dbo.showGrafikAfterWeek(1)
 
-/*Nadanie pacjentowi statusu VIP je¿eli ma >= 5 wizyt */
-exec addVisit(
-
-
-
+/*BAJER!!: Nadanie pacjentowi statusu VIP je¿eli ma >= 5 wizyt */
+insert into Wizyty values(96100907776,1,1,"2017-10-10","16:30:00","17:30:00","asdasd")
+select * from Wizyty
+select vip, Pesel from Pacjenci where pesel = 96100907776 /* STATUS VIP 0 */
+exec addVisit 96100907776,1,1,"2017-03-10","15:00:00"
+exec addVisit 96100907776,1,1,"2017-03-10","17:00:00"
+exec addVisit 96100907776,1,1,"2017-03-10","20:00:00"
+exec addVisit 96100907776,1,1,"2017-08-10","20:00:00"
+exec addVisit 96100907776,1,1,"2017-04-10","20:00:00"
+exec addVisit 96100907776,1,1,"2017-04-10","10:00:00"
+select vip, Pesel from Pacjenci where pesel = 96100907776 /* STATUS VIP 1 PO ZMIANIE!!! */
 
 
 
