@@ -164,3 +164,20 @@ begin
 	where idWiz = @idWiz
 	select * from Wizyty
 end
+
+--==============================================================================================
+create function listDAbility
+(@i int)
+returns table
+as
+return select * 
+	   from Pracownicy 
+	   where idPrac in (select idPrac from Umiejêtnoœci where @i = idUS)
+
+--==============================================================================================
+
+create function allPatientVisits 
+(@pesel bigint)
+returns table
+as
+return select * from Wizyty where PESEL=@pesel

@@ -242,3 +242,19 @@ begin
 			rollback
 	end
 end
+
+create trigger expirience
+on Wizyty
+after insert
+as
+begin
+	if not exists (select * from Umiejętności 
+				  where idPrac =  (select idPrac from inserted)
+				  and idUs = (select idUs from inserted))
+	begin
+			print 'Lekarz niewykwalifikowany do wykonywania tej usugi'
+			rollback
+	end
+end
+
+
