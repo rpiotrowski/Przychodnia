@@ -216,3 +216,4 @@ select * from Wizyty
 select * from Grafik
 select * from Badania
 select * from Skierowania
+
