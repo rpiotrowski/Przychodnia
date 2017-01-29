@@ -30,6 +30,16 @@ IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addSkierowanie
 DROP PROCEDURE addSkierowanie
 GO
 
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addGrafikGodzinyDzienTygodnia')
+DROP PROCEDURE addGrafikGodzinyDzienTygodnia
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'updateGrafikGodzinyDzienTygodnia')
+DROP PROCEDURE updateGrafikGodzinyDzienTygodnia
+GO
+
+
 /* Dodawanie badania */
 Create procedure addBadanie
         @pesel bigint,
@@ -75,7 +85,8 @@ Create procedure addSkierowanie
 		@iloœæ_wizyt int
 as
 begin try
-		if (select idUs from Umiejêtnoœci where idPrac = @idprac) = @idUs
+/* Error numeric */
+		if (select idUs from Umiejêtnoœci where idPrac=@idprac) = @idUs
 		begin
         insert into Skierowania
 		values (@idprac, @pesel, @data_wystawienia, @data_wa¿noœci, @idUS, @iloœæ_wizyt)
@@ -85,4 +96,41 @@ begin catch
      print ERROR_MESSAGE() 
 end catch;
 GO
+
+
+/* Edycja grafiku */
+Create procedure addGrafikGodzinyDzienTygodnia
+        @idPrac int,
+		@godzinaOd TIME(0),
+		@godzinaDo TIME(0),
+		@dzieñ_tyg varchar(20)
+as
+begin try
+
+        insert into Grafik
+		values (@idPrac, @godzinaOd, @godzinaDo, @dzieñ_tyg)
+end try
+begin catch
+     print ERROR_MESSAGE() 
+end catch;
+GO
+
+Create procedure updateGrafikGodzinyDzienTygodnia
+	    @idPrac int,
+		@godzinaOd TIME(0),
+		@godzinaDo TIME(0),
+		@dzieñ_tyg varchar(20)
+as
+begin try
+	update Grafik
+	set godzinaOd = @godzinaOd,
+	godzinaDo = @godzinaDo
+	where idPrac = @idPrac and  dzieñ_tyg = @dzieñ_tyg
+	select * from Grafik
+end try
+begin catch
+	 print ERROR_MESSAGE()
+end catch
+GO
+
 

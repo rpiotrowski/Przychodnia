@@ -36,3 +36,11 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addSkierowanie')
 DROP PROCEDURE addSkierowanie
 GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addGrafikGodzinyDzienTygodnia')
+DROP PROCEDURE addGrafikGodzinyDzienTygodnia
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'updateGrafikGodzinyDzienTygodnia')
+DROP PROCEDURE updateGrafikGodzinyDzienTygodnia
+GO
