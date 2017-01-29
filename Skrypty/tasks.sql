@@ -9,7 +9,7 @@ alter procedure addPatient
 as
 begin try
         insert into Pacjenci
-		values (@pesel, @name,@surname,@address,@phone,@mail,@vip); 
+		values (@pesel, @name,@surname,@address,@phone,@mail,@vip)
 		select * from Pacjenci
 end try
 begin catch
@@ -176,3 +176,28 @@ end
 removeV 2
 
 --===========================================================================================
+
+alter trigger checkVisitTime
+on Wizyty
+after insert
+as
+begin
+	select * from inserted
+	if exists 
+	(select * from Wizyty d inner join (SELECT * FROM inserted WHERE idWiz=( SELECT max(idWiz) FROM inserted)) i
+	on d.PESEL = i.PESEL where d.data_wizyty = i.data_wizyty and d.godzinaS = i.godzinaS)
+		begin
+			print 'Pacjent ma ju¿ umówion¹ wizytê o tej godzinie'
+			rollback
+	end
+
+end
+
+alter table Wizyty
+enable trigger checkVisitTime
+
+select so1.name
+from sysobjects so1 join sysobjects so2
+on so1.parent_obj = so2.id
+where so1.type = 'TR'
+and so2.name = 'Wizyty'

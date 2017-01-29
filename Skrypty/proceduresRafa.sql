@@ -1,4 +1,4 @@
-create procedure addPatient
+alter procedure addPatient
         @pesel bigint,
 		@name varchar(30),
 		@surname varchar(30),
@@ -9,7 +9,7 @@ create procedure addPatient
 as
 begin try
         insert into Pacjenci
-		values (@pesel, @name,@surname,@address,@phone,@mail,@vip); 
+		values (@pesel, @name,@surname,@address,@phone,@mail,@vip)
 		select * from Pacjenci
 end try
 begin catch

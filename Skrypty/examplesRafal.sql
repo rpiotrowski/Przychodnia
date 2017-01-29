@@ -4,8 +4,11 @@ exec addDoctor "Rafal","Piotrowski","Slowackiego 16 64-320 Olsztyn",678678678,"r
 exec updateDoctor 5,"Rafal","Piotrowski","Slowackiego 16 64-320 Olsztyn",678678678,"rafcio@wp.pl",pediatra
 exec addAbility 5,2
 exec addService "masaz gleboki",30,"200",0
-exec addComment 1,"Rozpoznanie zapalenie ucha srodkowego. Skierowanie pacjenta na masaz gleboki"
-exec addVisit 95071912345,5,1,"2017-03-10","10:00:00","10:30:00"
-exec removeV 2
+exec addComment 1,"Skierowany na operacjê"
+--dope³nia koniec wizyty
+exec addVisit 91071912531,4,1,"2017-06-10","10:00:00"
+exec removeV 32
 
 select * from dbo.showPatient(95071912345)
+
+select * from Wizyty
