@@ -9,5 +9,7 @@ exec addVisit 95071912345,5,2,"2017-11-13","10:00:00"
 exec removeV 18
 
 select * from dbo.showPatient(95071912345)
+
 select * from dbo.listDAbility(2)
 select * from dbo.allPatientVisits(95071912345)
+select * from dbo.popularServices

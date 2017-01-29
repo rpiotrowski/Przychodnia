@@ -260,10 +260,15 @@ return select * from Wizyty where PESEL=@pesel
 select * from dbo.allPatientVisits(95071912345)
 
 --======================================================
-create view popularServices
-(@i bigint)
-returns table
+alter view popularServices
 as
-return select * from Pacjenci where PESEL=@i
+	select u.nazwa,w.liczba_wykonanych from Us³ugi u left outer join
+	(select idUs, count(*) as liczba_wykonanych
+	from Wizyty
+	group by idUs 
+	) w
+	on u.idUs = w.idUs
+	where w.liczba_wykonanych is not null 
 
-select * from dbo.showPatient(95071912345)
+
+select * from dbo.popularServices

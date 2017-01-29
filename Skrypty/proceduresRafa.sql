@@ -181,3 +181,15 @@ create function allPatientVisits
 returns table
 as
 return select * from Wizyty where PESEL=@pesel
+
+
+--============================================================================================
+create view popularServices
+as
+	select u.nazwa,w.liczba_wykonanych from Us³ugi u left outer join
+	(select idUs, count(*) as liczba_wykonanych
+	from Wizyty
+	group by idUs 
+	) w
+	on u.idUs = w.idUs
+	where w.liczba_wykonanych is not null 
