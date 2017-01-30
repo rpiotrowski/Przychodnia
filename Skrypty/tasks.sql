@@ -224,3 +224,51 @@ begin
 			rollback
 	end
 end
+
+create trigger expirience
+on Wizyty
+after insert
+as
+begin
+	if not exists (select * from Umiejêtnoœci 
+				  where idPrac =  (select idPrac from inserted)
+				  and idUs = (select idUs from inserted))
+	begin
+			print 'Lekarz niewykwalifikowany do wykonywania tej usugi'
+			rollback
+	end
+end
+
+--==========================================================================================
+
+create function listDAbility
+(@i int)
+returns table
+as
+return select * 
+	   from Pracownicy 
+	   where idPrac in (select idPrac from Umiejêtnoœci where @i = idUS)
+
+select * from dbo.listDAbility(2)
+
+create function allPatientVisits 
+(@pesel bigint)
+returns table
+as
+return select * from Wizyty where PESEL=@pesel
+
+select * from dbo.allPatientVisits(95071912345)
+
+--======================================================
+alter view popularServices
+as
+	select u.nazwa,w.liczba_wykonanych from Us³ugi u left outer join
+	(select idUs, count(*) as liczba_wykonanych
+	from Wizyty
+	group by idUs 
+	) w
+	on u.idUs = w.idUs
+	where w.liczba_wykonanych is not null 
+
+
+select * from dbo.popularServices
