@@ -51,6 +51,13 @@ select iloœæ_wizyt from Skierowania where PESEL = 95071912531; /* Iloœæ wizyt zm
 exec addVisit 95071912531,1,4,"2017-08-19","10:10" /* Nie zadzia³a, bo inkrement 10 minut */
 exec addVisit 95071912531,1,4,"2017-08-19","10:15" /* Dzia³a, bo dobry inkrement */
 
+/*Nie mo¿na dodawaæ wizyty która jest 6+(VIP) lub 4+ lata w przysz³oœci (Za daleko!) */
+exec addVisit 95071912531,1,4,"2028-10-10","10:15"
+/* ANALOGICZNIE Nie mo¿na dodaæ wizyty która odbêdzie siê za mniej ni¿ dwie godziny! */
+
+
+/*Widok (raport) na pacjentach którzy czêsto wizytuj¹ (najczêstsze wizyty + przednajczêstsze) */
+select * from dbo.TopVisitsPatients
 
 
 
@@ -58,11 +65,14 @@ exec addVisit 95071912531,1,4,"2017-08-19","10:15" /* Dzia³a, bo dobry inkrement
 
 
 
-/*Dodaje skierowanie na wizytê do lekarza, równie¿ sprawdza czy odpowiedni lekarz do odpowiendiej us³ug */
+
+/*
+//Dodaje skierowanie na wizytê do lekarza, równie¿ sprawdza czy odpowiedni lekarz do odpowiendiej us³ug
 select * from Skierowania
 select * from Skierowania
-/* ERROR NUMERIC exec addSkierowanie 1,96100907776,"2017-11-11","2017-12-12",4,2 */
+ERROR NUMERIC exec addSkierowanie 1,96100907776,"2017-11-11","2017-12-12",4,2
 GO
+*/
 
 
 

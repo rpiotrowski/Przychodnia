@@ -76,3 +76,14 @@ BEGIN
       DROP TRIGGER [dbo].[regular_increments];
 END;
 go
+
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'visit_time_limit' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[visit_time_limit];
+END;
+go
+
+GO
+IF OBJECT_ID('TopVisitsPatients', 'V') IS NOT NULL
+    DROP VIEW  TopVisitsPatients;
+GO
