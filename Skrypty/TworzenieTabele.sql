@@ -220,42 +220,4 @@ select * from Badania
 select * from Skierowania
 go
 
-create trigger ten_visits_only
-on Wizyty
-after insert
-as
-begin
-	declare @vip tinyint
-	set @vip = (select vip from Pacjenci where PESEL = (select PESEL from inserted ) )
-
-	declare @l int
-	if @vip = 0
-		set @l = 3
-	else
-		set @l = 4
-	
-	if (select count(*) 
-	    from (select * from Wizyty where data_wizyty >= getdate()) as tab
-		where PESEL = (select PESEL from inserted)) > @l
-	begin
-			print 'Pacjent nie moze umowic juz wiecej wizyt'
-			rollback;
-	end
-end
-go
-
-create trigger expirience
-on Wizyty
-after insert
-as
-begin
-	if not exists (select * from Umiejętności 
-				  where idPrac =  (select idPrac from inserted)
-				  and idUs = (select idUs from inserted))
-	begin
-			print 'Lekarz niewykwalifikowany do wykonywania tej usugi'
-			rollback;
-	end
-end;
-
 
