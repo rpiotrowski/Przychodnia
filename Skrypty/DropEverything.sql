@@ -91,3 +91,7 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'oblicz_dochod')
 DROP PROCEDURE oblicz_dochod
 GO
+
+IF OBJECT_ID('TopSkierowania', 'V') IS NOT NULL
+    DROP VIEW  TopSkierowania;
+GO

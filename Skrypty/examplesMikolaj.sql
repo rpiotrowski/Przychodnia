@@ -55,15 +55,20 @@ exec addVisit 95071912531,1,4,"2017-08-19","10:15" /* Dzia³a, bo dobry inkrement
 exec addVisit 95071912531,1,4,"2028-10-10","10:15"
 /* ANALOGICZNIE Nie mo¿na dodaæ wizyty która odbêdzie siê za mniej ni¿ dwie godziny! */
 
-
+/* Bajer */
 /*Widok (raport) na pacjentach którzy czêsto wizytuj¹ (najczêstsze wizyty + przednajczêstsze) */
 select * from dbo.TopVisitsPatients
 
 /* BAJER */
+/* Widok i tabela tymczasowa */
 /*Raport na dochody przychodni z OBECNEGO miesi¹ca z wizyt, cena pobrana z listy us³ug dla ka¿dej wizyty*/
 exec addVisit 95071912531,1,4,"2017-01-31","10:15"
 exec addVisit 95071912531,1,4,"2017-01-31","12:00" /* Dodaje dwie wizyty na obecny miesi¹c */
 exec oblicz_dochod /* Dochód z obecnego miesi¹ca!! */
+
+/*Bajer?*/
+/* Widok na lekarzu który wystawia  skierowañ wiêcej ni¿ œrednia lekarzy */
+select * from dbo.TopSkierowania
 
 
 

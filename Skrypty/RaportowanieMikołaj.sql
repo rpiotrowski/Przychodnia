@@ -7,6 +7,14 @@ IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'oblicz_dochod'
 DROP PROCEDURE oblicz_dochod
 GO
 
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'oblicz_dochod')
+DROP PROCEDURE skierowania_pracownik
+GO
+
+IF OBJECT_ID('TopSkierowania', 'V') IS NOT NULL
+    DROP VIEW  TopSkierowania;
+GO
+
 /* Widok (raport) na pacjentów z iloœci¹ wizyt >=2 */
 create view TopVisitsPatients
 as
@@ -46,5 +54,20 @@ begin catch
 end catch;
 GO
 
-select * from Wizyty
-select * from Us³ugi
+
+/*Lekarze wystawiaj¹cy najwiêksze iloœci Skierowañ (wiêcej ni¿ œrednia) */
+create view TopSkierowania
+as
+	select u.idPrac from Skierowania u
+	left outer join
+	(select idPrac, nazwisko
+	from Pracownicy
+	) w
+	on u.idPrac = w.idPrac
+	group by u.IdPrac having COUNT(*)  >= (SELECT AVG(a.rcount) FROM 
+  (select count(*) as rcount 
+   FROM Skierowania r
+   GROUP BY r.IdPrac) a)
+go
+
+
