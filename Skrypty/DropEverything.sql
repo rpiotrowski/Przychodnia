@@ -82,3 +82,8 @@ BEGIN
       DROP TRIGGER [dbo].[visit_time_limit];
 END;
 go
+
+GO
+IF OBJECT_ID('TopVisitsPatients', 'V') IS NOT NULL
+    DROP VIEW  TopVisitsPatients;
+GO
