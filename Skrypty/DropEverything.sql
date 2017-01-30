@@ -87,3 +87,7 @@ GO
 IF OBJECT_ID('TopVisitsPatients', 'V') IS NOT NULL
     DROP VIEW  TopVisitsPatients;
 GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'oblicz_dochod')
+DROP PROCEDURE oblicz_dochod
+GO

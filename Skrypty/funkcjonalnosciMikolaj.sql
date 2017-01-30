@@ -54,6 +54,10 @@ IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'updateGrafikGo
 DROP PROCEDURE updateGrafikGodzinyDzienTygodnia
 GO
 
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addVisit')
+DROP PROCEDURE addVisit
+GO
+
 
 /* Dodawanie badania */
 Create procedure addBadanie
@@ -158,3 +162,20 @@ as
 	return select *  from Grafik where (idPrac = @idPrac);
 ;
 GO
+
+
+/* Dodawanie wizyty z rafa³a */
+create procedure addVisit
+	@pesel bigint,
+	@idPrac int,
+	@idUs int,
+	@data_wizyty date,/*'YYYY-MM-DD'*/
+	@godzinaS time(0)	
+as
+begin
+	declare @godzinaZ time(0)
+	set @godzinaZ = DATEADD(MINUTE, (select czas_trwania from Us³ugi where idUs = @idUs), @godzinaS)
+	insert into Wizyty
+	values(@pesel,@idPrac,@idUs,@data_wizyty,@godzinaS,@godzinaZ,NULL)
+	select * from Wizyty
+end

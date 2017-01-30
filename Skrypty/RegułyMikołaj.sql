@@ -47,17 +47,17 @@ declare @help bigint;
 set @help = (select PESEL from inserted);
 if (select vip from Pacjenci where PESEL = @help) = 0
 begin
-if (select iloœæ_wizyt from Skierowania where PESEL = @help) !=0
-begin
-print 'Pacjent nie jest VIP-em, liczba skierowañ pomniejsza siê'
-update Skierowania
+	if (select iloœæ_wizyt from Skierowania where PESEL = @help) !=0
+	begin
+	print 'Pacjent nie jest VIP-em, liczba skierowañ pomniejsza siê'
+	update Skierowania
 	set iloœæ_wizyt = iloœæ_wizyt - 1
 	where PESEL = @help
 	select * from Pacjenci;
 end
 else
 begin
-print 'Skoñczy³y siê skierowania, pójdŸ do lekarza po nowe!'
+	print 'Skoñczy³y siê skierowania, pójdŸ do lekarza po nowe!'
 end
 end
 go
@@ -69,12 +69,12 @@ as
 declare @help bigint;
 if (select datepart(minute, godzinaS) from inserted) = 0 or (select datepart(minute, godzinaS) from inserted) = 15 or (select datepart(minute, godzinaS) from inserted) = 30 or (select datepart(minute, godzinaS) from inserted) = 45
 begin
-print 'Wybrana godzina Startowa jest sukcesywnie inkrementem 15-minutowym'
+	print 'Wybrana godzina Startowa jest sukcesywnie inkrementem 15-minutowym'
 end
 else
 begin
-print 'Nie mozna umawiac na nieinkrementy 15-minutowe'
-rollback
+	print 'Nie mozna umawiac na nieinkrementy 15-minutowe'
+	rollback
 end
 go
 
@@ -87,18 +87,18 @@ declare @help bigint;
 set @help = (select PESEL from inserted)
 if (select vip from Pacjenci where PESEL= @help) = 0
 begin
-if (SELECT DATEDIFF(YEAR, GETDATE(), data_wizyty) from inserted) > 4 or (SELECT DATEDIFF(HOUR, GETDATE(), data_wizyty) from inserted) < 2
-begin
-print 'Nie mo¿na dodaæ wizyty, poniewa¿ rozpoczyna siê za daleko/blisko w przysz³oœci!'
-rollback
-end
+	if (SELECT DATEDIFF(YEAR, GETDATE(), data_wizyty) from inserted) > 4 or (SELECT DATEDIFF(HOUR, GETDATE(), data_wizyty) from inserted) < 2
+	begin
+		print 'Nie mo¿na dodaæ wizyty, poniewa¿ rozpoczyna siê za daleko/blisko w przysz³oœci!'
+		rollback
+	end
 end
 else
 begin
-if (SELECT DATEDIFF(YEAR, GETDATE(), data_wizyty) from inserted) > 6 or (SELECT DATEDIFF(HOUR, GETDATE(), data_wizyty) from inserted) < 2
+	if (SELECT DATEDIFF(YEAR, GETDATE(), data_wizyty) from inserted) > 6 or (SELECT DATEDIFF(HOUR, GETDATE(), data_wizyty) from inserted) < 2
 begin
-print 'Nie mo¿na dodaæ wizyty, poniewa¿ rozpoczyna siê za daleko/blisko w przysz³oœci! (VIP limit)'
-rollback
+	print 'Nie mo¿na dodaæ wizyty, poniewa¿ rozpoczyna siê za daleko/blisko w przysz³oœci! (VIP limit)'
+	rollback
 end
 end
 go

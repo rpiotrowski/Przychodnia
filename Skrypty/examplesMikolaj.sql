@@ -59,7 +59,11 @@ exec addVisit 95071912531,1,4,"2028-10-10","10:15"
 /*Widok (raport) na pacjentach którzy czêsto wizytuj¹ (najczêstsze wizyty + przednajczêstsze) */
 select * from dbo.TopVisitsPatients
 
-
+/* BAJER */
+/*Raport na dochody przychodni z OBECNEGO miesi¹ca z wizyt, cena pobrana z listy us³ug dla ka¿dej wizyty*/
+exec addVisit 95071912531,1,4,"2017-01-31","10:15"
+exec addVisit 95071912531,1,4,"2017-01-31","12:00" /* Dodaje dwie wizyty na obecny miesi¹c */
+exec oblicz_dochod /* Dochód z obecnego miesi¹ca!! */
 
 
 
