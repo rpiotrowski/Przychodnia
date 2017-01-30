@@ -1,4 +1,54 @@
-alter procedure addPatient
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'showPatient') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION showPatient
+GO
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'listDAbility') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION listDAbility
+GO
+IF EXISTS (
+    SELECT * FROM sysobjects WHERE id = object_id(N'allPatientVisits') 
+    AND xtype IN (N'FN', N'IF', N'TF')
+)
+    DROP FUNCTION allPatientVisits
+GO
+IF EXISTS (SELECT * FROM sys.views WHERE name = 'popularServices' AND type = 'v') 
+DROP VIEW popularServices
+go
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addPatient')
+DROP PROCEDURE addPatient
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'updatePatient')
+DROP PROCEDURE updatePatient
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addDoctor')
+DROP PROCEDURE addDoctor
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'updateDoctor')
+DROP PROCEDURE updateDoctor
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addAbility')
+DROP PROCEDURE addAbility
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addService')
+DROP PROCEDURE addService
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addComment')
+DROP PROCEDURE addComment
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'addVisit')
+DROP PROCEDURE addVisit
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'removeV')
+DROP PROCEDURE removeV
+GO
+
+
+create procedure addPatient
         @pesel bigint,
 		@name varchar(30),
 		@surname varchar(30),
@@ -15,7 +65,7 @@ end try
 begin catch
      print ERROR_MESSAGE() 
 end catch
-
+go
 --==========================================================================================
 
 create procedure updatePatient
@@ -36,7 +86,7 @@ end try
 begin catch
      print ERROR_MESSAGE() 
 end catch
-
+go
 --==========================================================================================
 
 create function showPatient 
@@ -44,9 +94,7 @@ create function showPatient
 returns table
 as
 return select * from Pacjenci where PESEL=@i
-
-select * from dbo.showPatient(95071912345)
-
+go
 --==========================================================================================
 
 
@@ -66,7 +114,7 @@ end try
 begin catch
      print ERROR_MESSAGE() 
 end catch
-
+go
 --==========================================================================================
 
 
@@ -88,7 +136,7 @@ end try
 begin catch
      print ERROR_MESSAGE() 
 end catch
-
+go
 --==========================================================================================
 
 create procedure addAbility
@@ -103,7 +151,7 @@ end try
 begin catch
      print ERROR_MESSAGE() 
 end catch
-
+go
 --==========================================================================================
 
 create procedure addService
@@ -120,7 +168,7 @@ end try
 begin catch
 	 print ERROR_MESSAGE()
 end catch
-
+go
 --==========================================================================================
 
 create procedure addComment
@@ -136,7 +184,7 @@ end try
 begin catch
 	 print ERROR_MESSAGE()
 end catch
-
+go
 --==========================================================================================
 
 create procedure addVisit
@@ -153,7 +201,7 @@ begin
 	values(@pesel,@idPrac,@idUs,@data_wizyty,@godzinaS,@godzinaZ,NULL)
 	select * from Wizyty
 end
-
+go
 --==========================================================================================
 
 create procedure removeV
@@ -164,7 +212,7 @@ begin
 	where idWiz = @idWiz
 	select * from Wizyty
 end
-
+go
 --==============================================================================================
 create function listDAbility
 (@i int)
@@ -173,6 +221,7 @@ as
 return select * 
 	   from Pracownicy 
 	   where idPrac in (select idPrac from Umiejêtnoœci where @i = idUS)
+go
 
 --==============================================================================================
 
@@ -181,7 +230,7 @@ create function allPatientVisits
 returns table
 as
 return select * from Wizyty where PESEL=@pesel
-
+go
 
 --============================================================================================
 create view popularServices
@@ -193,3 +242,45 @@ as
 	) w
 	on u.idUs = w.idUs
 	where w.liczba_wykonanych is not null 
+go
+
+
+create trigger ten_visits_only
+on Wizyty
+after insert
+as
+begin
+	declare @vip tinyint
+	set @vip = (select vip from Pacjenci where PESEL = (select PESEL from inserted ) )
+
+	declare @l int
+	if @vip = 0
+		set @l = 3
+	else
+		set @l = 5
+	
+	if (select count(*) 
+	    from (select * from Wizyty where data_wizyty >= getdate()) as tab
+		where PESEL = (select PESEL from inserted)) > @l
+	begin
+			print 'Pacjent nie moze umowic juz wiecej wizyt'
+			rollback
+	end
+end
+go
+
+
+create trigger expirience
+on Wizyty
+after insert
+as
+begin
+	if not exists (select * from Umiejêtnoœci 
+				  where idPrac =  (select idPrac from inserted)
+				  and idUs = (select idUs from inserted))
+	begin
+			print 'Lekarz niewykwalifikowany do wykonywania tej usugi'
+			rollback
+	end
+end
+go
