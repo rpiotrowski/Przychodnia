@@ -16,6 +16,12 @@ BEGIN
 END;
 go
 
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'visit_time_limit' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[visit_time_limit];
+END;
+go
+
 /*Nadanie pacjentowi statusu VIP je¿eli ma >= 5 wizyt */
 create trigger VIP_count
 on Wizyty
@@ -43,16 +49,15 @@ if (select vip from Pacjenci where PESEL = @help) = 0
 begin
 if (select iloœæ_wizyt from Skierowania where PESEL = @help) !=0
 begin
-print N'Pacjent nie jest VIP-em, liczba skierowañ pomniejsza siê'
+print 'Pacjent nie jest VIP-em, liczba skierowañ pomniejsza siê'
 update Skierowania
 	set iloœæ_wizyt = iloœæ_wizyt - 1
 	where PESEL = @help
 	select * from Pacjenci;
 end
 else
-print 'Pacjent jest vipem, nie potrzeba odj¹æ od liczby skierowañ'
 begin
-print N'Skoñczy³y siê skierowania, pójdŸ do lekarza po nowe!'
+print 'Skoñczy³y siê skierowania, pójdŸ do lekarza po nowe!'
 end
 end
 go
@@ -70,6 +75,31 @@ else
 begin
 print 'Nie mozna umawiac na nieinkrementy 15-minutowe'
 rollback
+end
+go
+
+/* Wizyty mo¿na umawiaæ maksymalnie godzinê przed, do 4/6 (depends on vip status) lat do przodu (zmienione dla ³atwiejszego testowania) */
+create trigger visit_time_limit
+on Wizyty
+for insert
+as
+declare @help bigint;
+set @help = (select PESEL from inserted)
+if (select vip from Pacjenci where PESEL= @help) = 0
+begin
+if (SELECT DATEDIFF(YEAR, GETDATE(), data_wizyty) from inserted) > 4 or (SELECT DATEDIFF(HOUR, GETDATE(), data_wizyty) from inserted) < 2
+begin
+print 'Nie mo¿na dodaæ wizyty, poniewa¿ rozpoczyna siê za daleko/blisko w przysz³oœci!'
+rollback
+end
+end
+else
+begin
+if (SELECT DATEDIFF(YEAR, GETDATE(), data_wizyty) from inserted) > 6 or (SELECT DATEDIFF(HOUR, GETDATE(), data_wizyty) from inserted) < 2
+begin
+print 'Nie mo¿na dodaæ wizyty, poniewa¿ rozpoczyna siê za daleko/blisko w przysz³oœci! (VIP limit)'
+rollback
+end
 end
 go
 
