@@ -218,7 +218,7 @@ select * from Wizyty
 select * from Grafik
 select * from Badania
 select * from Skierowania
-
+go
 
 create trigger ten_visits_only
 on Wizyty
@@ -239,9 +239,10 @@ begin
 		where PESEL = (select PESEL from inserted)) > @l
 	begin
 			print 'Pacjent nie moze umowic juz wiecej wizyt'
-			rollback
+			rollback;
 	end
 end
+go
 
 create trigger expirience
 on Wizyty
@@ -253,8 +254,8 @@ begin
 				  and idUs = (select idUs from inserted))
 	begin
 			print 'Lekarz niewykwalifikowany do wykonywania tej usugi'
-			rollback
+			rollback;
 	end
-end
+end;
 
 
