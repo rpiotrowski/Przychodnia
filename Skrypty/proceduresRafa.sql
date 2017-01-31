@@ -47,6 +47,18 @@ IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'removeV')
 DROP PROCEDURE removeV
 GO
 
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'ten_visits_only' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[ten_visits_only];
+END;
+go
+
+IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'expirience' AND [type] = 'TR')
+BEGIN
+      DROP TRIGGER [dbo].[expirience];
+END;
+go
+
 
 create procedure addPatient
         @pesel bigint,
